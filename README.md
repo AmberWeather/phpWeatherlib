@@ -1,0 +1,2 @@
+# phpWeatherlib
+PHP Weather Library.
