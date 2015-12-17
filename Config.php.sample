@@ -20,6 +20,16 @@ class Config {
                     'useragent' => "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.1453.81 Safari/537.36",
                     'cookies' => ''
     ];
+
+    const WU_CONF = [
+                    'api_key' => '',
+                    'features' => ['astronomy', 'conditions', 'forecast10day', 'hourly'],
+    ];
+
+
+
+
+
     private function __construct() {
         # code...
     }

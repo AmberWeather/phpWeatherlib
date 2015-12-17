@@ -35,14 +35,19 @@ class WundergroundProvider extends Provider {
 
     public function __construct($location = '', $features = [], $format = 'json', $apiKey = '') {
         parent::__construct($location);
+
         $this->baseUrl = 'http://api.wunderground.com/api/';
+        $this->apiKey = (string)$apiKey ?:Config::WU_CONF['api_key'];
+
         if (is_array($features) && !empty($features)) {
             $this->params['features'] = $features;
+        } else {
+            $this->params['features'] = Config::WU_CONF['features'];
         }
+
         $this->params['settings']['lang'] = (string)$this->location->lang ?
                                                     $this->getLangCode($this->location->lang):'EN';
         $this->params['format'] = (string)$format ?:'json';
-        $this->apiKey = (string)$apiKey ?:Config::API_KEY['Wunderground'];
     }
 
     public function buildUrl() {
