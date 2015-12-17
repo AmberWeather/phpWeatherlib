@@ -47,6 +47,29 @@ class Location extends Base {
                                 'wmo' => '',
                                 'zipcode' => ''
                                 ]) {
+        if (is_array($data) && !empty($data)) {
+            $this->setValue($data);
+        }
+    }
+
+    public function setValue($data = [
+                                'id' => '',
+                                'city' => '',
+                                'latitude' => '',
+                                'longitude' => '',
+                                'country' => '',
+                                'countryCode' => '',
+                                'lang' => '',
+                                'full_text' => '',
+                                'timezone' => '',
+                                'timezone_full' => '',
+                                'osmid' => '',
+                                'accuid' => '',
+                                'owmid' => '',
+                                'yhcode' => '',
+                                'wmo' => '',
+                                'zipcode' => ''
+                                ]) {
         foreach ($data as $k => $v) {
             $this->$k = $v;
         }
