@@ -24,6 +24,8 @@ class Weatherlib {
     public $dailyForecast;
     public $hourlyForecast;
     public $sun_moon;
+    private $errno = 0;
+    private $error = '';
 
     public function __construct($locationData = [], $datasource = 'wunderground') {
         $this->setLocation($locationData);
@@ -67,8 +69,19 @@ class Weatherlib {
             $this->hourlyForecast = $this->provider->getHourlyForecast();
             $this->sun_moon = $this->provider->getSunAndMoon();
             return true;
+        } else {
+            $this->error = 'Fetch Data Failed.';
         }
         return false;
+    }
+
+    public function getWeather($format = 'json') {
+        if ($format == 'json') {
+            return json_encode($this);
+        } elseif ($format == 'xml') {
+            return 'Only JSON here. If you need xml format, please complete it by yourself.';
+        }
+        return json_encode($this);
     }
 
     public function getRawData() {
@@ -93,5 +106,13 @@ class Weatherlib {
             $this->hourlyForecast = $this->provider->getHourlyForecast();
         }
         return $this->hourlyForecast;
+    }
+
+    public function error() {
+        return $this->error;
+    }
+
+    public function errno() {
+        return $this->errno;
     }
 }
