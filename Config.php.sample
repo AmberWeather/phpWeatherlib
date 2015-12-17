@@ -6,13 +6,11 @@
 namespace Weatherlib;
 
 /**
-*
-*/
+ * Config sample.
+ * Please put your config in this file and rename this file to Config.php
+ */
 class Config {
 
-    const API_KEY = [
-                    'Wunderground' => '',
-    ];
     const CURL_OPT = [
                     'CURLOPT_CONNECTTIMEOUT_MS' => 3000,
                     'CURLOPT_TIMEOUT_MS' => 5000,
@@ -25,8 +23,6 @@ class Config {
                     'api_key' => '',
                     'features' => ['astronomy', 'conditions', 'forecast10day', 'hourly'],
     ];
-
-
 
 
 
