@@ -1,0 +1,26 @@
+<?php
+/**
+ * @author: Tiger <DropFan@Gmail.com>
+ * @date: 2015/12/10
+ */
+namespace Weatherlib;
+
+/**
+*
+*/
+class Config {
+
+    const API_KEY = [
+                    'Wunderground' => '',
+    ];
+    const CURL_OPT = [
+                    'CURLOPT_CONNECTTIMEOUT_MS' => 3000,
+                    'CURLOPT_TIMEOUT_MS' => 5000,
+
+                    'useragent' => "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.1453.81 Safari/537.36",
+                    'cookies' => ''
+    ];
+    private function __construct() {
+        # code...
+    }
+}
