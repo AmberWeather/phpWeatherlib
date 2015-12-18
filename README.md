@@ -1,2 +1,10 @@
-# phpWeatherlib
-PHP Weather Library.
+#phpWeatherlib
+PHP Weather Library. (unfinished)
+
+#Contacts:
+
+Tiger (DropFan)
+
+Email:DropFan@Gmail.com
+
+http://about.me/DropFan
