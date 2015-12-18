@@ -307,7 +307,7 @@ class WundergroundProvider extends Provider {
 
         // var_dump($ret);die;
 
-        return $l;
+        return $ret;
     }
 
     public function getWeatherCode($weather) {
