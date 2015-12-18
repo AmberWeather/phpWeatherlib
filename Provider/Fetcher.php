@@ -73,13 +73,27 @@ class Fetcher {
 
         $content = curl_exec($ch);
 
-        if (!$content) {
-            // var_dump(curl_errno($ch)); //28 timeout
-            // echo curl_error($ch);
-            //log
+        /**
+         * check curl error number.
+         * if no error curl_errno($ch) == 0
+         * @see https://secure.php.net/manual/en/function.curl-errno.php
+         * @see http://curl.haxx.se/libcurl/c/libcurl-errors.html
+         */
+        if (curl_errno($ch) != 0) {
+            $result = [
+                        'data' => $content,
+                        'error' => curl_error($ch),
+                        'errno' => curl_errno($ch)
+                        ];
+        } else {
+            $result = [
+                        'data' => $content
+            ];
         }
+
         curl_close($ch);
-        return $content;
+
+        return $result;
     }
 
     public function fileGetContentsFetch($url) {

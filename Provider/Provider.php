@@ -29,7 +29,7 @@ abstract class Provider /*implements IProvider*/ {
     // protected $format = 'json';
     protected $rawData = '';
 
-    protected $errno = 0;
+    protected $errno = 0; # 1000+ curl error
     protected $error = '';
 // https://api.wunderground.com/api/2b0d6572c90d3e4a/lang:CN/astronomy/conditions/forecast10day/hourly/q/40.0494806,116.4073421.json
 
@@ -52,12 +52,21 @@ abstract class Provider /*implements IProvider*/ {
     public function fetchRaw() {
         $fetcher = new Fetcher();
         $res = $fetcher->fetch($this->getQueryUrl());
-        if (!$res) {
-            return false;
+        // var_dump($res);
+        if (is_array($res)) {
+            if (is_string($res['data'])) {
+                $this->rawData = $res['data'];
+                return $this->checkResult();
+            }
+
+            $this->error = $res['error'];
+            $this->errno = 1000 + $res['errno'];
         } else {
-            $this->rawData = $res;
+            $this->errno = 1;
+            $this->error = 'Fetch raw data failed. (Unknown ERROR.)';
         }
-        return $this->checkResult();
+        // var_dump($this->errno, $this->error);
+        return false;
     }
 
     public function getRawData() {
@@ -83,4 +92,12 @@ abstract class Provider /*implements IProvider*/ {
     abstract public function getHourlyForecast();
 
     abstract public function getWeatherCode($weather);
+
+    public function errno() {
+        return $this->errno;
+    }
+
+    public function error() {
+        return $this->error;
+    }
 }

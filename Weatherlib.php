@@ -70,7 +70,8 @@ class Weatherlib {
             $this->sun_moon = $this->provider->getSunAndMoon();
             return true;
         } else {
-            $this->error = 'Fetch Data Failed.';
+            $this->errno = $this->provider->errno();
+            $this->error = $this->provider->error();
         }
         return false;
     }
