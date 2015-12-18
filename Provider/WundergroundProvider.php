@@ -78,23 +78,26 @@ class WundergroundProvider extends Provider {
             return false;
         }
 
-        if (isset($j['response']['features']) && !empty($j['response']['features'])) {
-            if (isset($j['response']['features']['conditions'])) {
-                return true;
-            }
-        }
-
         if (isset($j['response']['error'])) {
             $err = $j['response']['error'];
 
             if ($err['type'] == 'querynotfound') {
                 $this->errno = 2002;
                 $this->error = $err['description'];
+                return false;
             } elseif ($err['type'] == 'keynotfound') {
                 $this->errno = 2003;
                 $this->error = $err['description'];
+                return false;
             }
+
             $this->error = $err['description'];
+        }
+
+        if (isset($j['response']['features']) && !empty($j['response']['features'])) {
+            if (isset($j['response']['features']['conditions'])) {
+                return true;
+            }
         } else {
             $this->errno = 2000;
             $this->error = 'Check Data failed Unknown Error.';
@@ -272,6 +275,9 @@ class WundergroundProvider extends Provider {
 
     public function getSunAndMoon() {
         $j = json_decode($this->rawData, 1);
+        if (!isset($j['moon_phase'])) {
+            return false;
+        }
         $m = $j['moon_phase'];
         // var_dump($m);
         $ret = [];
