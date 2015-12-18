@@ -68,26 +68,38 @@ class WundergroundProvider extends Provider {
     }
 
     public function checkResult() {
-        try {
-            $j = json_decode($this->rawData, 1);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
+
+        $j = json_decode($this->rawData, 1);
+        // var_dump($j);
+
+        if (!$j) {
+            $this->errno = 2001;
+            $this->error = 'Data Error.';
             return false;
         }
 
-        if (isset($j['response']['error'])) {
-            $err = $j['response']['error'];
-            //log
-            if ($err['type'] == 'querynotfound') {
-                //log
-                echo $this->queryUrl;
-                echo '<br>';
-                echo $err['description'];
-                return false;
+        if (isset($j['response']['features'])) {
+            if (isset($j['response']['features']['conditions'])) {
+                return true;
             }
         }
+        if (isset($j['response']['error'])) {
+            $err = $j['response']['error'];
 
-        return true;
+            if ($err['type'] == 'querynotfound') {
+                $this->errno = 2002;
+                $this->error = $err['description'];
+            } elseif ($err['type'] == 'keynotfound') {
+                $this->errno = 2003;
+                $this->error = $err['description'];
+            }
+            $this->error = $err['description'];
+        }
+
+        $this->errno = 2000;
+        $this->error = 'Check Data failed Unknown Error.';
+
+        return false;
     }
 
     public function getRawCurrentCondition() {
@@ -113,35 +125,39 @@ class WundergroundProvider extends Provider {
     public function getCurrentCondition() {
         $j = json_decode($this->rawData, 1);
         // var_dump($j);
+        if (!isset($j['current_observation'])) {
+            return false;
+        }
         $c = $j['current_observation'];
 
         // var_dump($c);
         $ret = new Current();
-        $ret->setObservation_time($c['observation_epoch']);
-        $ret->setWeather($c['weather']);
-        $ret->setWeatherID($this->getWeatherCode($c['icon']));
-        $ret->setDescription($c['weather']);
-        $ret->setTemperature($c['temp_c']);
-        $ret->setHumidity($c['relative_humidity']);
-        $w = [
-                'speed' => $c['wind_kph'],
-                'direction' => $c['wind_dir'],
-                'degrees' => $c['wind_degrees'],
-                'gust' => $c['wind_gust_kph'],
-                'description' => $c['wind_string']
-        ];
+        isset($c['observation_epoch']) && $ret->setObservation_time($c['observation_epoch']);
+        isset($c['weather']) && $ret->setWeather($c['weather']);
+        isset($c['icon']) && $ret->setWeatherID($this->getWeatherCode($c['icon']));
+        isset($c['weather']) && $ret->setDescription($c['weather']);
+        isset($c['temp_c']) && $ret->setTemperature($c['temp_c']);
+        isset($c['relative_humidity']) && $ret->setHumidity($c['relative_humidity']);
+        $w = [];
+        isset($c['wind_kph']) && $w['speed'] = $c['wind_kph'];
+        isset($c['wind_dir']) && $w['direction'] = $c['wind_dir'];
+        isset($c['wind_degrees']) && $w['degrees'] = $c['wind_degrees'];
+        isset($c['wind_gust_kph']) && $w['gust'] = $c['wind_gust_kph'];
+        isset($c['wind_string']) && $w['description'] = $c['wind_string'];
         $ret->setWind($w);
-        $ret->setPressure($c['pressure_mb']); # 1 mbar = 1 hPa = 0.1 kPa = 0.76 mmHg = 0.03 inHg
-        $ret->setPressure_trend($c['pressure_trend']);
-        $ret->setDewPoint($c['dewpoint_c']);
-        $ret->setWindchill($c['windchill_c']);
-        $ret->setFeelsLike($c['feelslike_c']);
-        $ret->setVisibility($c['visibility_km']);
-        $ret->setUV($c['UV']);
-        $ret->setSolarradiation($c['solarradiation']);
-        $ret->setHeat_index($c['heat_index_c']);
 
-        $ret->setPrecip($c['precip_1hr_metric']);
+        # 1 mbar = 1 hPa = 0.1 kPa = 0.76 mmHg = 0.03 inHg
+        isset($c['pressure_mb']) && $ret->setPressure($c['pressure_mb']);
+        isset($c['pressure_trend']) && $ret->setPressure_trend($c['pressure_trend']);
+        isset($c['dewpoint_c']) && $ret->setDewPoint($c['dewpoint_c']);
+        isset($c['windchill_c']) && $ret->setWindchill($c['windchill_c']);
+        isset($c['feelslike_c']) && $ret->setFeelsLike($c['feelslike_c']);
+        isset($c['visibility_km']) && $ret->setVisibility($c['visibility_km']);
+        isset($c['UV']) && $ret->setUV($c['UV']);
+        isset($c['solarradiation']) && $ret->setSolarradiation($c['solarradiation']);
+        isset($c['heat_index_c']) && $ret->setHeat_index($c['heat_index_c']);
+
+        isset($c['precip_1hr_metric']) && $ret->setPrecip($c['precip_1hr_metric']);
 
         // $ret->set
         // echo $this->queryUrl;
@@ -151,9 +167,15 @@ class WundergroundProvider extends Provider {
 
     public function getDailyForecast() {
         $j = json_decode($this->rawData, 1);
+        if (!isset($j['forecast'])) {
+            return false;
+        }
         // var_dump($j);
-        $dl_txt = $j['forecast']['txt_forecast']['forecastday'];
+        // $dl_txt = $j['forecast']['txt_forecast']['forecastday'];
         // var_dump($dl_txt);
+        if (!isset($j['forecast']['simpleforecast']['forecastday'])) {
+            return false;
+        }
         $dl = $j['forecast']['simpleforecast']['forecastday'];
         $ret = new DailyForecastList();
         foreach ($dl as $k => $v) {
@@ -161,44 +183,44 @@ class WundergroundProvider extends Provider {
             // var_dump($dl[$k]);
             $d = new DailyForecast();
             // $d->setDescription();
-            $d->setTime($v['date']['epoch']);
-            $d->setWeather($v['conditions']);
-            $d->setWeatherID($this->getWeatherCode($v['icon']));
-            $t = [
-                'high' => $v['high']['celsius'],
-                'low' => $v['low']['celsius']
-            ];
+            isset($v['date']['epoch']) && $d->setTime($v['date']['epoch']);
+            isset($v['conditions']) && $d->setWeather($v['conditions']);
+            isset($v['icon']) && $d->setWeatherID($this->getWeatherCode($v['icon']));
+
+            $t = [];
+            isset($v['high']['celsius']) && $t['high'] = $v['high']['celsius'];
+            isset($v['low']['celsius']) && $t['low'] = $v['low']['celsius'];
             $d->setTemperature($t);
-            $precip = [
-                        'amount' => $v['qpf_allday']['mm'],
-                        'amount_day' => $v['qpf_day']['mm'],
-                        'amount_night' => $v['qpf_night']['mm'],
-                        'probability' => $v['pop']
-            ];
+
+            $precip = [];
+            isset($v['qpf_allday']['mm']) && $precip['amount'] = $v['qpf_allday']['mm'];
+            isset($v['qpf_day']['mm']) && $precip['amount_day'] = $v['qpf_day']['mm'];
+            isset($v['qpf_night']['mm']) && $precip['amount_night'] = $v['qpf_night']['mm'];
+            isset($v['pop']) && $precip['probability'] = $v['pop'];
             $d->setPrecip($precip);
-            $snow = [
-                    'amount' => $v['snow_allday']['cm'],
-                    'amount_day' => $v['snow_day']['cm'],
-                    'amount_night' => $v['snow_night']['cm']
-            ];
+
+            $snow = [];
+            isset($v['snow_allday']['cm']) && $snow['amount'] = $v['snow_allday']['cm'];
+            isset($v['snow_day']['cm']) && $snow['amount_day'] = $v['snow_day']['cm'];
+            isset($v['snow_night']['cm']) && $snow['amount_night'] = $v['snow_night']['cm'];
             $d->setSnow($snow);
-            $wind = [
-                    'speed' => $v['avewind']['kph'],
-                    'direction' => $v['avewind']['dir'],
-                    'degrees' => $v['avewind']['degrees']
-            ];
+
+            $wind = [];
+            isset($v['avewind']['kph']) && $wind['speed'] = $v['avewind']['kph'];
+            isset($v['avewind']['dir']) && $wind['direction'] = $v['avewind']['dir'];
+            isset($v['avewind']['degrees']) && $wind['degrees'] = $v['avewind']['degrees'];
             $d->setWind($wind);
-            $wind_max = [
-                    'speed' => $v['maxwind']['kph'],
-                    'direction' => $v['maxwind']['dir'],
-                    'degrees' => $v['maxwind']['degrees']
-            ];
+
+            $wind_max = [];
+            isset($v['maxwind']['kph']) && $wind['speed'] = $v['maxwind']['kph'];
+            isset($v['maxwind']['dir']) && $wind['direction'] = $v['maxwind']['dir'];
+            isset($v['maxwind']['degrees']) && $wind['degrees'] = $v['maxwind']['degrees'];
             $d->setWind_max($wind_max);
-            $humidity = [
-                        'high' => $v['maxhumidity'],
-                        'low' => $v['minhumidity'],
-                        'ave' => $v['avehumidity']
-            ];
+
+            $humidity = [];
+            isset($v['maxhumidity']) && $humidity['high'] = $v['maxhumidity'];
+            isset($v['minhumidity']) && $humidity['low'] = $v['minhumidity'];
+            isset($v['avehumidity']) && $humidity['ave'] = $v['avehumidity'];
             $d->setHumidity($humidity);
             // var_dump($d);
             $ret[] = $d;
@@ -208,36 +230,39 @@ class WundergroundProvider extends Provider {
 
     public function getHourlyForecast() {
         $j = json_decode($this->rawData, 1);
+        if (!isset($j['hourly_forecast'])) {
+            return false;
+        }
         $hl = $j['hourly_forecast'];
         $ret = new HourlyForecastList();
         foreach ($hl as $k => $v) {
             $h = new HourlyForecast();
             // var_dump($v);
-            $h->setTime($v['FCTTIME']['epoch']);
-            $h->setWeather($v['condition']);
-            $h->setWeatherID($this->getWeatherCode($v['icon']));
-            $h->setTemperature($v['temp']['metric']);
-            $h->setDewpoint($v['dewpoint']['metric']);
-            $w = [
-                'speed' => $v['wspd']['metric'],
-                'direction' => $v['wdir']['dir'],
-                'degrees' => $v['wdir']['degrees']
-            ];
+            isset($v['FCTTIME']['epoch']) && $h->setTime($v['FCTTIME']['epoch']);
+            isset($v['condition']) && $h->setWeather($v['condition']);
+            isset($v['icon']) && $h->setWeatherID($this->getWeatherCode($v['icon']));
+            isset($v['temp']['metric']) && $h->setTemperature($v['temp']['metric']);
+            isset($v['dewpoint']['metric']) && $h->setDewpoint($v['dewpoint']['metric']);
+
+            $w = [];
+            isset($v['wspd']['metric']) && $w['speed'] = $v['wspd']['metric'];
+            isset($v['wdir']['dir']) && $w['direction'] = $v['wdir']['dir'];
+            isset($v['wdir']['degrees']) && $w['degrees'] = $v['wdir']['degrees'];
             $h->setWind($w);
-            $h->setPressure($v['mslp']['metric']);
-            $h->setHumidity($v['humidity']);
-            $h->setWindchill($v['windchill']['metric']);
-            $h->setFeelsLike($v['feelslike']['metric']);
-            $precip = [
-                'amount' => $v['qpf']['metric'],
-                'probability' => $v['pop']
-            ];
+
+            isset($v['mslp']['metric']) && $h->setPressure($v['mslp']['metric']);
+            isset($v['humidity']) && $h->setHumidity($v['humidity']);
+            isset($v['windchill']['metric']) && $h->setWindchill($v['windchill']['metric']);
+            isset($v['feelslike']['metric']) && $h->setFeelsLike($v['feelslike']['metric']);
+            $precip = [];
+            isset($v['qpf']['metric']) && $precip['amount'] = $v['qpf']['metric'];
+            isset($v['pop']) && $precip['probability'] = $v['pop'];
             $h->setPrecip($precip);
-            $snow = [
-                'amount' => $v['snow']['metric'],
-            ];
+            $snow = [];
+            isset($v['snow']['metric']) && $snow['amount'] = $v['snow']['metric'];
             $h->setSnow($snow);
-            $h->setHeat_index($v['heatindex']['metric']);
+
+            isset($v['heatindex']['metric']) && $h->setHeat_index($v['heatindex']['metric']);
             // var_dump($h);
             $ret[] = $h;
         }
@@ -248,19 +273,28 @@ class WundergroundProvider extends Provider {
         $j = json_decode($this->rawData, 1);
         $m = $j['moon_phase'];
         // var_dump($m);
-        $ret = [
-                'sunrise' => $m['sunrise']['hour'] .':'.$m['sunrise']['minute'],
-                'sunset' => $m['sunset']['hour'] .':'.$m['sunset']['minute'],
-                'moonrise' => $m['moonrise']['hour'] .':'.$m['moonrise']['minute'],
-                'moonset' => $m['moonset']['hour'] .':'.$m['moonset']['minute'],
-                'percentIlluminated' => $m['percentIlluminated'],
-                'ageOfMoon' => $m['ageOfMoon'],
-                'phaseofMoon' => $m['phaseofMoon'],
-                'hemisphere' => $m['hemisphere']
-        ];
+        $ret = [];
+        isset($m['sunrise']) && $ret['sunrise'] = $m['sunrise']['hour'] .':'.$m['sunrise']['minute'];
+        isset($m['sunset']) && $ret['sunset'] = $m['sunset']['hour'] .':'.$m['sunset']['minute'];
+        isset($m['moonrise']) && $ret['moonrise'] = $m['moonrise']['hour'] .':'.$m['moonrise']['minute'];
+        isset($m['moonset']) && $ret['moonset'] = $m['moonset']['hour'] .':'.$m['moonset']['minute'];
+        isset($m['percentIlluminated']) && $ret['percentIlluminated'] = $m['percentIlluminated'];
+        isset($m['ageOfMoon']) && $ret['ageOfMoon'] = $m['ageOfMoon'];
+        isset($m['phaseofMoon']) && $ret['phaseofMoon'] = $m['phaseofMoon'];
+        isset($m['hemisphere']) && $ret['hemisphere'] = $m['hemisphere'];
 
         // var_dump($ret);die;
         return $ret;
+    }
+
+    public function getLocation() {
+        $j = json_decode($this->rawData, 1);
+        if (!isset($j['current_observation']['display_location'])) {
+            return false;
+        }
+        $l = $j['current_observation']['display_location'];
+        // $l
+
     }
 
     public function getWeatherCode($weather) {
