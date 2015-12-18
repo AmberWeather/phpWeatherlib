@@ -19,10 +19,6 @@ class HourlyForecastList extends ForecastList {
         parent::__construct($var);
     }
 
-    public function getIterator() {
-        return $this->v;
-    }
-
     public function check($value) {
         // $this->i++;
         // echo ' Hourly check ' . $this->i;

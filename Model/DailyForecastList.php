@@ -17,10 +17,6 @@ class DailyForecastList extends ForecastList {
         parent::__construct($var);
     }
 
-    public function getIterator() {
-        return $this->v;
-    }
-
     public function check($value) {
         return $value instanceof DailyForecast;
     }
