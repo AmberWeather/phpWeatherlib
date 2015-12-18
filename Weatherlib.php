@@ -68,6 +68,7 @@ class Weatherlib {
             $this->dailyForecast = $this->provider->getDailyForecast();
             $this->hourlyForecast = $this->provider->getHourlyForecast();
             $this->sun_moon = $this->provider->getSunAndMoon();
+            $this->location = $this->provider->getLocation();
             return true;
         } else {
             $this->errno = $this->provider->errno();

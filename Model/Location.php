@@ -34,6 +34,7 @@ class Location extends Base {
                                 'city' => '',
                                 'latitude' => '',
                                 'longitude' => '',
+                                'state' => '',
                                 'country' => '',
                                 'countryCode' => '',
                                 'lang' => '',
@@ -57,6 +58,7 @@ class Location extends Base {
                                 'city' => '',
                                 'latitude' => '',
                                 'longitude' => '',
+                                'state' => '',
                                 'country' => '',
                                 'countryCode' => '',
                                 'lang' => '',
@@ -129,6 +131,14 @@ class Location extends Base {
 
     public function setLang($value) {
         $this->lang = $value;
+    }
+
+    public function getState() {
+        return $this->state;
+    }
+
+    public function setState($value) {
+        $this->state = $value;
     }
 
     public function getCountry() {

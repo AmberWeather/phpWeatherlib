@@ -293,8 +293,21 @@ class WundergroundProvider extends Provider {
             return false;
         }
         $l = $j['current_observation']['display_location'];
+        $o = $j['current_observation']['observation_location'];
         // $l
+        $ret = $this->location;
 
+        isset($l['city']) && $ret->setCity($l['city']);
+        isset($l['full']) && $ret->setFull_text($l['full']);
+        isset($l['state_name']) && $ret->setstate($l['state_name']);
+        isset($l['country_iso3166']) && $ret->setCountryCode($l['country_iso3166']);
+        isset($l['zip']) && $ret->setZipcode($l['zip']);
+        isset($l['wmo']) && $ret->setWmo($l['wmo']);
+        isset($o['country']) && $ret->setCountry($o['country']);
+
+        // var_dump($ret);die;
+
+        return $l;
     }
 
     public function getWeatherCode($weather) {
