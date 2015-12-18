@@ -79,6 +79,21 @@ class Weatherlib {
 
     public function getWeather($format = 'json') {
         if ($format == 'json') {
+            if (!($this->location instanceof Location)) {
+                $this->location = null;
+            }
+            if (!($this->currentCondition instanceof Current)) {
+                $this->currentCondition = null;
+            }
+            if (!($this->dailyForecast instanceof DailyForecastList)) {
+                $this->dailyForecast = null;
+            }
+            if (!($this->hourlyForecast instanceof HourlyForecastList)) {
+                $this->hourlyForecast = null;
+            }
+            if (empty($this->sun_moon) || !$this->sun_moon) {
+                $this->sun_moon = null;
+            }
             return json_encode($this);
         } elseif ($format == 'xml') {
             return 'Only JSON here. If you need xml format, please complete it by yourself.';
