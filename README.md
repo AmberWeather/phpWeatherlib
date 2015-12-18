@@ -3,8 +3,8 @@ PHP Weather Library. (unfinished)
 
 #Contacts:
 
-Tiger (DropFan)
+Author: Tiger (DropFan)
 
-Email:DropFan@Gmail.com
+Email: DropFan@Gmail.com
 
 http://about.me/DropFan
