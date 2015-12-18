@@ -78,11 +78,12 @@ class WundergroundProvider extends Provider {
             return false;
         }
 
-        if (isset($j['response']['features'])) {
+        if (isset($j['response']['features']) && !empty($j['response']['features'])) {
             if (isset($j['response']['features']['conditions'])) {
                 return true;
             }
         }
+
         if (isset($j['response']['error'])) {
             $err = $j['response']['error'];
 
@@ -94,10 +95,10 @@ class WundergroundProvider extends Provider {
                 $this->error = $err['description'];
             }
             $this->error = $err['description'];
+        } else {
+            $this->errno = 2000;
+            $this->error = 'Check Data failed Unknown Error.';
         }
-
-        $this->errno = 2000;
-        $this->error = 'Check Data failed Unknown Error.';
 
         return false;
     }
