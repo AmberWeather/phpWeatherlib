@@ -216,9 +216,9 @@ class WundergroundProvider extends Provider {
             $d->setWind($wind);
 
             $wind_max = [];
-            isset($v['maxwind']['kph']) && $wind['speed'] = $v['maxwind']['kph'];
-            isset($v['maxwind']['dir']) && $wind['direction'] = $v['maxwind']['dir'];
-            isset($v['maxwind']['degrees']) && $wind['degrees'] = $v['maxwind']['degrees'];
+            isset($v['maxwind']['kph']) && $wind_max['speed'] = $v['maxwind']['kph'];
+            isset($v['maxwind']['dir']) && $wind_max['direction'] = $v['maxwind']['dir'];
+            isset($v['maxwind']['degrees']) && $wind_max['degrees'] = $v['maxwind']['degrees'];
             $d->setWind_max($wind_max);
 
             $humidity = [];
@@ -226,7 +226,7 @@ class WundergroundProvider extends Provider {
             isset($v['minhumidity']) && $humidity['low'] = $v['minhumidity'];
             isset($v['avehumidity']) && $humidity['ave'] = $v['avehumidity'];
             $d->setHumidity($humidity);
-            // var_dump($d);
+            // var_dump($d);die;
             $ret[] = $d;
         }
         return $ret;
