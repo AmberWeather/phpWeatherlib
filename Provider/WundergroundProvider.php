@@ -392,7 +392,7 @@ class WundergroundProvider extends Provider {
 
     public function getLangCode($lang) {
 
-        $map = require(WEATHERLIB_DIR . 'Weatherlib/Lang/lang_map_wu.php');
+        $map = require(LIB_DIR . '/Weatherlib/Lang/lang_map_wu.php');
         if (isset($map[$lang])) {
             $ret = $map[$lang];
         } elseif (isset($map[substr($lang, 0, 3)])) {

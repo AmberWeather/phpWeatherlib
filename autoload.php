@@ -4,10 +4,10 @@
  * @date: 2015/12/08
  */
 
-defined('WEATHERLIB_DIR') || define('WEATHERLIB_DIR', dirname(__FILE__).'/../');
+defined('LIB_DIR') || define('LIB_DIR', dirname(__FILE__).'/../');
 
 spl_autoload_register(function ($class) {
-    $path = WEATHERLIB_DIR. str_replace("\\", "/", $class) . '.php';
+    $path = LIB_DIR. str_replace("\\", "/", $class) . '.php';
 
     if (file_exists($path)) {
         $a = include($path);
