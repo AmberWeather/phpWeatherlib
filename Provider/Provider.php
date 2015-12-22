@@ -5,7 +5,7 @@
  */
 namespace Weatherlib\Provider;
 
-use Weatherlib\Provider\Fetcher;
+use Weatherlib\Util\Fetcher;
 use Weatherlib\Model\Location as Location;
 
 /**
@@ -31,7 +31,6 @@ abstract class Provider /*implements IProvider*/ {
 
     protected $errno = 0; # 1000+ curl error
     protected $error = '';
-// https://api.wunderground.com/api/2b0d6572c90d3e4a/lang:CN/astronomy/conditions/forecast10day/hourly/q/40.0494806,116.4073421.json
 
     public function __construct($location) {
         if ($location instanceof Location) {
