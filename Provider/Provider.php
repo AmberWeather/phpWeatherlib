@@ -29,16 +29,51 @@ abstract class Provider /*implements IProvider*/ {
     // protected $format = 'json';
     protected $rawData = '';
 
+    protected $fetcher = null;
+
     protected $errno = 0; # 1000+ curl error
     protected $error = '';
 
-    public function __construct($location) {
+    public function __construct($location, $fetcher = '') {
         if ($location instanceof Location) {
             $this->location = $location;
         } else {
             die('location error');
         }
+
+        if ($fetcher instanceof Fetcher) {
+            $this->fetcher = $fetcher;
+        } else {
+            $this->fetcher = new Fetcher();
+        }
+
         return false;
+    }
+
+    public function getLocation() {
+        return $this->location;
+    }
+
+    public function setLocation($location) {
+        if ($location instanceof location) {
+            $this->location = $location;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getFetcher() {
+        return $this->fetcher;
+    }
+
+    public function setFetcher($fetcher) {
+        if ($fetcher instanceof Fetcher) {
+            $this->fetcher = $fetcher;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getQueryUrl() {
@@ -49,7 +84,7 @@ abstract class Provider /*implements IProvider*/ {
     abstract public function buildUrl();
 
     public function fetchRaw() {
-        $fetcher = new Fetcher();
+        $fetcher = $this->fetcher;
         $res = $fetcher->fetch($this->getQueryUrl());
         // var_dump($res);
         if (is_array($res)) {
