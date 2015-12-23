@@ -29,11 +29,19 @@ class Weatherlib {
 
     public function __construct($locationData = [], $datasource = 'wunderground') {
         $this->setLocation($locationData);
-        $this->setProvider($datasource, $location = $this->location);
+        $this->provider = ProviderFactory::getProvider($datasource, $this->location);
     }
 
-    public function setProvider($datasource = 'wunderground') {
-        $this->provider = ProviderFactory::getProvider($datasource, $this->location);
+    public function getProvider() {
+        return $this->provider;
+    }
+
+    public function setProvider($provider) {
+        if ($provider instanceof Provider) {
+            $this->provider = $provider;
+        } else {
+            return false;
+        }
     }
 
     public function setLocation($data = []) {
