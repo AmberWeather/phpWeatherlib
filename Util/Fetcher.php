@@ -64,9 +64,9 @@ class Fetcher {
     }
 
     public function setCurlProxy($proxy = '', $auth = '', $type = '') {
-        !empty($proxy) && $this->curlOptions['CURLOPT_PROXY'] = $proxy;
-        !empty($auth) && $this->curlOptions['CURLOPT_PROXYUSERPWD'] = $auth;
-        !empty($type) && $this->curlOptions['CURLOPT_PROXYTYPE'] = $type == 'socks'? CURLPROXY_SOCKS5:CURLPROXY_HTTP;
+        !empty($proxy) && $this->curlOptions[CURLOPT_PROXY] = $proxy;
+        !empty($auth) && $this->curlOptions[CURLOPT_PROXYUSERPWD] = $auth;
+        !empty($type) && $this->curlOptions[CURLOPT_PROXYTYPE] = $type == 'socks'? CURLPROXY_SOCKS5:CURLPROXY_HTTP;
     }
 
     public function curlFetch($url, $post = false) {
