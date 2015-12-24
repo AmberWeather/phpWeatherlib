@@ -6,12 +6,13 @@
 namespace Weatherlib\Util;
 
 use Weatherlib\Config as Config;
+use Weatherlib\Util\Base;
 
 // use Weatherlib\Exception;
 /**
  *
  */
-class Fetcher {
+class Fetcher extends Base {
 
     /**
      * curl options array.
@@ -67,6 +68,22 @@ class Fetcher {
         !empty($proxy) && $this->curlOptions[CURLOPT_PROXY] = $proxy;
         !empty($auth) && $this->curlOptions[CURLOPT_PROXYUSERPWD] = $auth;
         !empty($type) && $this->curlOptions[CURLOPT_PROXYTYPE] = $type == 'socks'? CURLPROXY_SOCKS5:CURLPROXY_HTTP;
+    }
+
+    public function setUseragent($ua = '') {
+        !empty($ua) && $this->useragent = $ua;
+    }
+
+    public function getUseragent() {
+        return $this->useragent;
+    }
+
+    public function setCookies($cookies = '') {
+        !empty($cookies) && $this->cookies = $cookies;
+    }
+
+    public function getCookies() {
+        return $this->cookies;
     }
 
     public function curlFetch($url, $post = false) {
