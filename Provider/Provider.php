@@ -88,9 +88,12 @@ abstract class Provider /*implements IProvider*/ {
         $res = $fetcher->fetch($this->getQueryUrl());
         // var_dump($res);
         if (is_array($res)) {
-            if (is_string($res['data'])) {
+            if (is_string($res['data']) && !empty($res['data'])) {
                 $this->rawData = $res['data'];
                 return $this->checkResult();
+            } else {
+                $this->error = 'Fetched data is empty.';
+                $this->errno = 2000;
             }
 
             $this->error = $res['error'];

@@ -74,7 +74,7 @@ class WundergroundProvider extends Provider {
 
         if (!$j) {
             $this->errno = 2001;
-            $this->error = 'Data Error.';
+            $this->error = 'Fetched data decode failed, maybe it is not json format.';
             return false;
         }
 
