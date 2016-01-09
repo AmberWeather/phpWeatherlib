@@ -100,7 +100,7 @@ class WundergroundProvider extends Provider {
             if (isset($j['response']['features']['conditions'])) {
                 return true;
             }
-        } else {
+        } elseif ($this->errno != 2004) {
             $this->errno = 2000;
             $this->error = 'Check Data failed Unknown Error.';
         }
