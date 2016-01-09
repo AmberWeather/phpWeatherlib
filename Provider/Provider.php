@@ -96,8 +96,9 @@ abstract class Provider /*implements IProvider*/ {
                 $this->errno = 2000;
             }
 
-            $this->error = $res['error'];
-            $this->errno = 1000 + $res['errno'];
+            # curl error
+            isset($res['error']) && $this->error = $res['error'];
+            isset($res['errno']) && $this->errno = 1000 + $res['errno']; # 1000 + curl errno
         } else {
             $this->errno = 1;
             $this->error = 'Fetch raw data failed. (Unknown ERROR.)';
