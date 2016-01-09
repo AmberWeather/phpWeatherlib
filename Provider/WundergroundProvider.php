@@ -91,6 +91,8 @@ class WundergroundProvider extends Provider {
                 return false;
             }
 
+            # other error return by wunderground
+            $this->errno = 2004;
             $this->error = $err['description'];
         }
 
