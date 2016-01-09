@@ -109,6 +109,10 @@ class Weatherlib {
         return json_encode($this);
     }
 
+    public function getQueryUrl() {
+        return $this->provider->getQueryUrl();
+    }
+
     public function getRawData() {
         return $this->provider->getRawData();
     }
