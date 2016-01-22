@@ -116,6 +116,11 @@ class Weatherlib {
     public function getRawData() {
         return $this->provider->getRawData();
     }
+
+    public function setRawData($raw) {
+        $this->provider->setRawData($raw);
+    }
+
     public function getCurrentCondition() {
         if (!($this->currentCondition instanceof Current)) {
             $this->currentCondition = $this->provider->getCurrentCondition();
