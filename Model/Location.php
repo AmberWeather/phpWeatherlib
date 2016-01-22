@@ -12,6 +12,7 @@ use Weatherlib\Util\Base;
 class Location extends Base {
 
     public $id;
+    public $geohash;
     public $city;
     public $latitude;
     public $longitude;
@@ -31,6 +32,7 @@ class Location extends Base {
 
     public function __construct($data = [
                                 'id' => '',
+                                'geohash' => '',
                                 'city' => '',
                                 'latitude' => '',
                                 'longitude' => '',
@@ -55,6 +57,7 @@ class Location extends Base {
 
     public function setValue($data = [
                                 'id' => '',
+                                'geohash' => '',
                                 'city' => '',
                                 'latitude' => '',
                                 'longitude' => '',
