@@ -33,7 +33,10 @@ class WundergroundProvider extends Provider {
     private $format = 'json';
 // https://api.wunderground.com/api/2b0d6572c90d3e4a/lang:CN/astronomy/conditions/forecast10day/hourly/q/40.0494806,116.4073421.json
 
-    public function __construct($location = '', $features = [], $format = 'json', $apiKey = '') {
+    public function __construct(Location $location = null,
+                                array $features = [],
+                                string $format = 'json',
+                                string $apiKey = '') {
         parent::__construct($location);
 
         $this->baseUrl = 'http://api.wunderground.com/api/';
@@ -319,7 +322,7 @@ class WundergroundProvider extends Provider {
         return $ret;
     }
 
-    public function getWeatherCode($weather) {
+    public function getWeatherCode(string $weather) {
         if (!is_string($weather) || empty($weather)) {
             return WeatherCode::NOT_AVAILABLE;
         }

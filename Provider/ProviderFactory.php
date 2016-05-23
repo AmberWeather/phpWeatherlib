@@ -5,9 +5,8 @@
  */
 namespace Weatherlib\Provider;
 
-use Weatherlib\Provider\WundergroundProvider;
-
 use Weatherlib\Model\Location;
+use Weatherlib\Provider\WundergroundProvider;
 
 /**
  * This clss is a creater of provider.
@@ -23,11 +22,12 @@ class ProviderFactory {
 
     /**
      * [getProvider description]
-     * @param  string $provider which provider object you want
-     * @param  object $location object of Location
-     * @return object           object of Provier
+     * @param  string        $provider which provider object you want
+     * @param  Location|null $location object of Location
+     * @return Provider|false          object of Provier
      */
-    public static function getProvider($provider = 'wunderground', $location) {
+    public static function getProvider(string $provider = 'wunderground',
+                                       Location $location = null) {
 
         if (!($location instanceof Location)) {
             return false;

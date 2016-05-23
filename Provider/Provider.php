@@ -5,7 +5,7 @@
  */
 namespace Weatherlib\Provider;
 
-use Weatherlib\Util\Fetcher;
+use Weatherlib\Util\Fetcher as Fetcher;
 use Weatherlib\Model\Location as Location;
 
 /**
@@ -34,7 +34,7 @@ abstract class Provider /*implements IProvider*/ {
     protected $errno = 0; # 1000+ curl error
     protected $error = '';
 
-    public function __construct($location, $fetcher = '') {
+    public function __construct(Location $location = null, Fetcher $fetcher = null) {
         if ($location instanceof Location) {
             $this->location = $location;
         } else {
@@ -54,7 +54,7 @@ abstract class Provider /*implements IProvider*/ {
         return $this->location;
     }
 
-    public function setLocation($location) {
+    public function setLocation(Location $location) {
         if ($location instanceof Location) {
             $this->location = $location;
             return true;
@@ -67,7 +67,7 @@ abstract class Provider /*implements IProvider*/ {
         return $this->fetcher;
     }
 
-    public function setFetcher($fetcher) {
+    public function setFetcher(Fetcher $fetcher) {
         if ($fetcher instanceof Fetcher) {
             $this->fetcher = $fetcher;
             return true;
@@ -83,7 +83,7 @@ abstract class Provider /*implements IProvider*/ {
 
     abstract public function buildUrl();
 
-    public function fetchRaw($raw = null) {
+    public function fetchRaw(string $raw = null) {
         if (!$raw){
             $fetcher = $this->fetcher;
             $res = $fetcher->fetch($this->getQueryUrl());
@@ -118,7 +118,7 @@ abstract class Provider /*implements IProvider*/ {
         return $this->rawData;
     }
 
-    public function setRawData($raw) {
+    public function setRawData(string $raw) {
         $this->rawData = $raw;
     }
 
@@ -136,7 +136,7 @@ abstract class Provider /*implements IProvider*/ {
 
     abstract public function getHourlyForecast();
 
-    abstract public function getWeatherCode($weather);
+    abstract public function getWeatherCode(string $weather);
 
     public function errno() {
         return $this->errno;
