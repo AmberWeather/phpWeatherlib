@@ -64,6 +64,9 @@ class Weatherlib {
         //         'zipcode' => '100000'
         //         ];
         $this->location = new Location($data);
+        if ($this->provider) {
+            $this->provider->setLocation($this->location);
+        }
     }
 
     public function getLocation() {
