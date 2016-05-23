@@ -27,7 +27,7 @@ class Weatherlib {
     private $errno = 0;
     private $error = '';
 
-    public function __construct($locationData = [], $datasource = 'wunderground') {
+    public function __construct(array $locationData = [], string $datasource = 'wunderground') {
         $this->setLocation($locationData);
         $this->provider = ProviderFactory::getProvider($datasource, $this->location);
     }
@@ -36,7 +36,7 @@ class Weatherlib {
         return $this->provider;
     }
 
-    public function setProvider($provider) {
+    public function setProvider(Provider $provider) {
         if ($provider instanceof Provider) {
             $this->provider = $provider;
         } else {
@@ -44,7 +44,7 @@ class Weatherlib {
         }
     }
 
-    public function setLocation($data = []) {
+    public function setLocation(array $data = []) {
         // $data = [
         //         'id' => '1',
         //         'city' => 'Beijing',
@@ -88,7 +88,7 @@ class Weatherlib {
         return false;
     }
 
-    public function getWeather($format = 'json') {
+    public function getWeather(string $format = 'json') {
         if ($format == 'json') {
             if (!($this->location instanceof Location)) {
                 $this->location = null;
@@ -120,7 +120,7 @@ class Weatherlib {
         return $this->provider->getRawData();
     }
 
-    public function setRawData($raw) {
+    public function setRawData(string $raw) {
         $this->provider->setRawData($raw);
     }
 
