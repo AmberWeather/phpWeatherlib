@@ -55,7 +55,7 @@ abstract class Provider /*implements IProvider*/ {
     }
 
     public function setLocation($location) {
-        if ($location instanceof location) {
+        if ($location instanceof Location) {
             $this->location = $location;
             return true;
         } else {
@@ -83,9 +83,13 @@ abstract class Provider /*implements IProvider*/ {
 
     abstract public function buildUrl();
 
-    public function fetchRaw() {
-        $fetcher = $this->fetcher;
-        $res = $fetcher->fetch($this->getQueryUrl());
+    public function fetchRaw($raw = null) {
+        if (!$raw){
+            $fetcher = $this->fetcher;
+            $res = $fetcher->fetch($this->getQueryUrl());
+        } else {
+            $res = $raw;
+        }
         // var_dump($res);
         if (is_array($res)) {
             if (is_string($res['data']) && !empty($res['data'])) {
@@ -99,6 +103,9 @@ abstract class Provider /*implements IProvider*/ {
             # curl error
             isset($res['error']) && $this->error = $res['error'];
             isset($res['errno']) && $this->errno = 1000 + $res['errno']; # 1000 + curl errno
+        } elseif (is_string($res)) {
+            $this->rawData = $res;
+            return $this->checkResult();
         } else {
             $this->errno = 1;
             $this->error = 'Fetch raw data failed. (Unknown ERROR.)';
