@@ -118,7 +118,7 @@ abstract class Provider /*implements IProvider*/ {
         return $this->rawData;
     }
 
-    public function setRawData(string $raw) {
+    public function setRawData($raw='') {
         $this->rawData = $raw;
     }
 
@@ -136,7 +136,7 @@ abstract class Provider /*implements IProvider*/ {
 
     abstract public function getHourlyForecast();
 
-    abstract public function getWeatherCode(string $weather);
+    abstract public function getWeatherCode($weather='');
 
     public function errno() {
         return $this->errno;

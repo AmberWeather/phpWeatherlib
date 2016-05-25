@@ -322,7 +322,7 @@ class WundergroundProvider extends Provider {
         return $ret;
     }
 
-    public function getWeatherCode(string $weather) {
+    public function getWeatherCode($weather='') {
         if (!is_string($weather) || empty($weather)) {
             return WeatherCode::NOT_AVAILABLE;
         }
@@ -395,7 +395,7 @@ class WundergroundProvider extends Provider {
         }
     }
 
-    public function getLangCode($lang) {
+    public function getLangCode($lang='en') {
 
         $map = require(LIB_DIR . '/Weatherlib/Lang/lang_map_wu.php');
         if (isset($map[$lang])) {
