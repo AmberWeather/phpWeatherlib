@@ -83,7 +83,7 @@ abstract class Provider /*implements IProvider*/ {
 
     abstract public function buildUrl();
 
-    public function fetchRaw(string $raw = null) {
+    public function fetchRaw($raw = null) {
         if (!$raw){
             $fetcher = $this->fetcher;
             $res = $fetcher->fetch($this->getQueryUrl());

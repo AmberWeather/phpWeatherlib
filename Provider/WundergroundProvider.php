@@ -34,9 +34,9 @@ class WundergroundProvider extends Provider {
 // https://api.wunderground.com/api/2b0d6572c90d3e4a/lang:CN/astronomy/conditions/forecast10day/hourly/q/40.0494806,116.4073421.json
 
     public function __construct(Location $location = null,
-                                array $features = [],
-                                string $format = 'json',
-                                string $apiKey = '') {
+                                $features = [],
+                                $format = 'json',
+                                $apiKey = '') {
         parent::__construct($location);
 
         $this->baseUrl = 'http://api.wunderground.com/api/';

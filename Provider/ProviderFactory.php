@@ -9,7 +9,7 @@ use Weatherlib\Model\Location;
 use Weatherlib\Provider\WundergroundProvider;
 
 /**
- * This clss is a creater of provider.
+ * This class is a creater of provider.
  * You should add a new provider in getProvier() method if you want to use other provider class.
  * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/12
@@ -26,7 +26,7 @@ class ProviderFactory {
      * @param  Location|null $location object of Location
      * @return Provider|false          object of Provier
      */
-    public static function getProvider(string $provider = 'wunderground',
+    public static function getProvider($provider = 'wunderground',
                                        Location $location = null) {
 
         if (!($location instanceof Location)) {

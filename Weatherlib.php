@@ -19,15 +19,16 @@ use Weatherlib\Provider\ProviderFactory;
 class Weatherlib {
 
     public $location;
-    private $provider;
     public $currentCondition;
     public $dailyForecast;
     public $hourlyForecast;
     public $sun_moon;
+
+    private $provider;
     private $errno = 0;
     private $error = '';
 
-    public function __construct(array $locationData = [], string $datasource = 'wunderground') {
+    public function __construct($locationData = [], $datasource = 'wunderground') {
         $this->setLocation($locationData);
         $this->provider = ProviderFactory::getProvider($datasource, $this->location);
     }
@@ -44,7 +45,7 @@ class Weatherlib {
         }
     }
 
-    public function setLocation(array $data = []) {
+    public function setLocation($data = []) {
         // $data = [
         //         'id' => '1',
         //         'city' => 'Beijing',
@@ -88,7 +89,7 @@ class Weatherlib {
         return false;
     }
 
-    public function getWeather(string $format = 'json') {
+    public function getWeather($format = 'json') {
         if ($format == 'json') {
             if (!($this->location instanceof Location)) {
                 $this->location = null;
@@ -120,7 +121,7 @@ class Weatherlib {
         return $this->provider->getRawData();
     }
 
-    public function setRawData(string $raw) {
+    public function setRawData($raw) {
         $this->provider->setRawData($raw);
     }
 
