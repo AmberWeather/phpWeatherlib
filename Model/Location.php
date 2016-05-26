@@ -11,15 +11,15 @@ use Weatherlib\Util\Base;
 
 class Location extends Base {
 
-    public $id;
-    public $geohash;
+    private $id;
+    private $geohash;
     public $city;
     public $latitude;
     public $longitude;
-    public $osmid;
-    public $owmid;
-    public $accuid;
-    public $yhcode;
+    private $osmid;
+    private $owmid;
+    private $accuid;
+    private $yhcode;
     public $state;
     public $country;
     public $countryCode;
