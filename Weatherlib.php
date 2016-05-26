@@ -29,6 +29,7 @@ class Weatherlib {
     private $error = '';
 
     public function __construct($locationData = [], $datasource = 'wunderground') {
+        $this->initData($locationData);
         $this->setLocation($locationData);
         $this->provider = ProviderFactory::getProvider($datasource, $this->location);
     }
@@ -108,7 +109,7 @@ class Weatherlib {
             }
             return json_encode($this);
         } elseif ($format == 'xml') {
-            return 'Only JSON here. If you need xml format, please complete it by yourself.';
+            return '{"Only JSON here. If you need xml format, please complete it by yourself."}';
         }
         return json_encode($this);
     }
@@ -132,6 +133,14 @@ class Weatherlib {
         return $this->currentCondition;
     }
 
+    private function setCurrentCondition(Current $cur=null) {
+        if (!($cur instanceof Current)) {
+            $this->currentCondition = new Current();
+        } else {
+            $this->currentCondition = $cur;
+        }
+    }
+
     public function getDailyForecast() {
         if (!($this->dailyForecast instanceof DailyForecastList)) {
             $this->dailyForecast = $this->provider->getDailyForecast();
@@ -139,11 +148,34 @@ class Weatherlib {
         return $this->dailyForecast;
     }
 
+    private function setDailyForecast(DailyForecastList $dl=null) {
+        if (!($dl instanceof DailyForecastList)) {
+            $this->dailyForecast = new DailyForecastList();
+        } else {
+            $this->dailyForecast = $dl;
+        }
+    }
+
     public function getHourlyForecast() {
         if (!($this->hourlyForecast instanceof HourlyForecastList)) {
             $this->hourlyForecast = $this->provider->getHourlyForecast();
         }
         return $this->hourlyForecast;
+    }
+
+    private function setHourlyForecast(HourlyForecastList $hl=null) {
+        if (!($hl instanceof HourlyForecastList)) {
+            $this->hourlyForecast = new HourlyForecastList();
+        } else {
+            $this->hourlyForecast = $hl;
+        }
+    }
+
+    private function initData($locationData=[]) {
+        $this->setLocation($locationData);
+        $this->setCurrentCondition();
+        $this->setDailyForecast();
+        $this->setHourlyForecast();
     }
 
     public function error() {
