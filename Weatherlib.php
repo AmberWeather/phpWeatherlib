@@ -49,6 +49,7 @@ class Weatherlib {
     public function setLocation($data = []) {
         // $data = [
         //         'id' => '1',
+        //         'geohash' => '',
         //         'city' => 'Beijing',
         //         'latitude' => '39.55',
         //         'longitude' => '119.55',
