@@ -1,14 +1,15 @@
 <?php
 /**
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/08
+ * @author: Tiger <DropFan@Gmail.com>
  */
 
 namespace Weatherlib\Util;
 
 use Weatherlib\Exception;
 
-class Wind extends Base {
+class Wind extends Base
+{
 
     public $speed;
     public $direction;
@@ -16,65 +17,77 @@ class Wind extends Base {
     public $gust;
     public $description;
 
-    public function __construct($w = []) {
-
+    public function __construct($w = [])
+    {
+        // code...
     }
-    public function setValue($v) {
+
+    public function setValue($v)
+    {
         if (is_array($v)) {
-            isset($v['speed']) && $this->speed = $v['speed'];
-            isset($v['direction']) && $this->direction = $v['direction'];
-            isset($v['degrees']) && $this->degrees = $v['degrees'];
-            isset($v['gust']) && $this->gust = $v['gust'];
+            isset($v['speed']) && $this->speed             = $v['speed'];
+            isset($v['direction']) && $this->direction     = $v['direction'];
+            isset($v['degrees']) && $this->degrees         = $v['degrees'];
+            isset($v['gust']) && $this->gust               = $v['gust'];
             isset($v['description']) && $this->description = $v['description'];
         } elseif (is_object($v)) {
-            isset($v->speed) && $this->speed = $v->speed;
-            isset($v->direction) && $this->direction = $v->direction;
-            isset($v->degrees) && $this->degrees = $v->degrees;
-            isset($v->gust) && $this->gust = $v->gust;
+            isset($v->speed) && $this->speed             = $v->speed;
+            isset($v->direction) && $this->direction     = $v->direction;
+            isset($v->degrees) && $this->degrees         = $v->degrees;
+            isset($v->gust) && $this->gust               = $v->gust;
             isset($v->description) && $this->description = $v->description;
         } else {
             throw new Exception('Invalid type of params. You should pass an array or object.');
         }
     }
 
-    public function getSpeed() {
+    public function getSpeed()
+    {
         return $this->speed;
     }
 
-    public function setSpeed($value) {
+    public function setSpeed($value)
+    {
         $this->speed = $value;
     }
 
-    public function getDirection() {
+    public function getDirection()
+    {
         return $this->direction;
     }
 
-    public function setDirection($value) {
+    public function setDirection($value)
+    {
         $this->direction = $value;
     }
 
-    public function getDegrees() {
+    public function getDegrees()
+    {
         return $this->degrees;
     }
 
-    public function setDegrees($value) {
+    public function setDegrees($value)
+    {
         $this->degrees = $value;
     }
 
-    public function getGust() {
+    public function getGust()
+    {
         return $this->gust;
     }
 
-    public function setGust($value) {
+    public function setGust($value)
+    {
         $this->gust = $value;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($value) {
+    public function setDescription($value)
+    {
         $this->description = $value;
     }
-
 }

@@ -1,23 +1,27 @@
 <?php
 /**
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/08
+ * @author: Tiger <DropFan@Gmail.com>
  */
 namespace Weatherlib\Util;
 
-abstract class Base {
+abstract class Base
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         echo 'Base';
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return json_encode($this);
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         // if ($name = 'sun') echo '[a]<br>';
-        $getter = 'get'.ucfirst($name);
+        $getter = 'get' . ucfirst($name);
         if (isset($this->$name)) {
             return $this->$name;
         } elseif (method_exists($this, $getter)) {
@@ -29,13 +33,14 @@ abstract class Base {
         throw new \OutOfRangeException($message);
     }
 
-    public function __set($name, $value) {
-        $setter = 'set'.ucfirst($name);
+    public function __set($name, $value)
+    {
+        $setter = 'set' . ucfirst($name);
         if (method_exists($this, $setter)) {
             return $this->$setter($value);
         }
 
-        $getter = 'get'.$name;
+        $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
             $message = sprintf('Implicit property "%2$s" of class "%1$s" cannot
                                be set because it is read-only.', get_class($this), $name);
@@ -46,9 +51,9 @@ abstract class Base {
         throw new \OutOfRangeException($message);
     }
 /*
-
-    public function __get($name) {
-        $getter = 'get'.ucfirst($name);
+    public function __get($name)
+    {
+        $getter = 'get' . ucfirst($name);
         if (method_exists($this, $getter)) {
             return $this->$getter();
         }
@@ -58,13 +63,14 @@ abstract class Base {
         throw new \OutOfRangeException($message);
     }
 
-    public function __set($name, $value) {
-        $setter = 'set'.ucfirst($name);
+    public function __set($name, $value)
+    {
+        $setter = 'set' . ucfirst($name);
         if (method_exists($this, $setter)) {
             return $this->$setter($value);
         }
 
-        $getter = 'get'.$name;
+        $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
             $message = sprintf('Implicit property "%2$s" of class "%1$s" cannot
                                be set because it is read-only.', get_class($this), $name);
@@ -73,6 +79,5 @@ abstract class Base {
                                 or a method named "%3$s".', get_class($this), $name, $setter);
         }
         throw new \OutOfRangeException($message);
-    }
-    */
+    }*/
 }

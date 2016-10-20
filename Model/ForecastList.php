@@ -1,19 +1,21 @@
 <?php
 /**
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/10
+ * @author: Tiger <DropFan@Gmail.com>
  */
 
 namespace Weatherlib\Model;
 
-use Weatherlib\Util\Base;
 use Weatherlib\Model\Forecast;
+use Weatherlib\Util\Base;
 
-class ForecastList extends Base implements \IteratorAggregate, \ArrayAccess{
+class ForecastList extends Base implements \IteratorAggregate, \ArrayAccess
+{
 
     public $forecast = [];
 
-    public function __construct($var = []) {
+    public function __construct($var = [])
+    {
         // echo 'ForecastList';
         if (is_array($var)) {
             $this->forecast = $var;
@@ -22,19 +24,23 @@ class ForecastList extends Base implements \IteratorAggregate, \ArrayAccess{
         }
     }
 
-    public function getIterator() {
+    public function getIterator()
+    {
         return $this->forecast;
     }
 
-    public function offsetExists($o) {
+    public function offsetExists($o)
+    {
         return isset($this->forecast[$o]);
     }
 
-    public function offsetGet($o) {
-        return isset($this->forecast[$o]) ? $this->v[$o]:null;
+    public function offsetGet($o)
+    {
+        return isset($this->forecast[$o]) ? $this->v[$o] : null;
     }
 
-    public function offsetSet($o, $v) {
+    public function offsetSet($o, $v)
+    {
         if ($this->check($v)) {
             if (is_null($o)) {
                 $this->forecast[] = $v;
@@ -42,15 +48,17 @@ class ForecastList extends Base implements \IteratorAggregate, \ArrayAccess{
                 $this->forecast[$o] = $value;
             }
         } else {
-            throw new \Exception("Error Type");
+            throw new \Exception('Error Type');
         }
     }
 
-    public function offsetUnset($o) {
+    public function offsetUnset($o)
+    {
         unset($this->forecast[$o]);
     }
 
-    public function check($value) {
+    public function check($value)
+    {
         return $value instanceof Forecast;
     }
 }

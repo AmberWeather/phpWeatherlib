@@ -1,22 +1,19 @@
 <?php
 /**
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/12
+ * @author: Tiger <DropFan@Gmail.com>
  */
 namespace Weatherlib;
 
-use Weatherlib\Model\Location;
 use Weatherlib\Model\Current;
 use Weatherlib\Model\DailyForecastList;
 use Weatherlib\Model\HourlyForecastList;
-use Weatherlib\Util\Base;
-
+use Weatherlib\Model\Location;
 use Weatherlib\Provider\ProviderFactory;
 
-/**
-*
-*/
-class Weatherlib {
+
+class Weatherlib
+{
 
     public $location;
     public $currentCondition;
@@ -28,17 +25,20 @@ class Weatherlib {
     private $errno = 0;
     private $error = '';
 
-    public function __construct($locationData = [], $datasource = 'wunderground') {
+    public function __construct($locationData = [], $datasource = 'wunderground')
+    {
         $this->initData($locationData);
         $this->setLocation($locationData);
         $this->provider = ProviderFactory::getProvider($datasource, $this->location);
     }
 
-    public function getProvider() {
+    public function getProvider()
+    {
         return $this->provider;
     }
 
-    public function setProvider(Provider $provider) {
+    public function setProvider(Provider $provider)
+    {
         if ($provider instanceof Provider) {
             $this->provider = $provider;
         } else {
@@ -46,7 +46,8 @@ class Weatherlib {
         }
     }
 
-    public function setLocation($data = []) {
+    public function setLocation($data = [])
+    {
         // $data = [
         //         'id' => '1',
         //         'geohash' => '',
@@ -72,26 +73,31 @@ class Weatherlib {
         }
     }
 
-    public function getLocation() {
+    public function getLocation()
+    {
         return $this->location;
     }
 
-    public function fetchWeather() {
+    public function fetchWeather()
+    {
         if ($this->provider->fetchRaw()) {
             $this->currentCondition = $this->provider->getCurrentCondition();
-            $this->dailyForecast = $this->provider->getDailyForecast();
-            $this->hourlyForecast = $this->provider->getHourlyForecast();
-            $this->sun_moon = $this->provider->getSunAndMoon();
-            $this->location = $this->provider->getLocation();
+            $this->dailyForecast    = $this->provider->getDailyForecast();
+            $this->hourlyForecast   = $this->provider->getHourlyForecast();
+            $this->sun_moon         = $this->provider->getSunAndMoon();
+            $this->location         = $this->provider->getLocation();
+
             return true;
         } else {
             $this->errno = $this->provider->errno();
             $this->error = $this->provider->error();
         }
+
         return false;
     }
 
-    public function getWeather($format = 'json') {
+    public function getWeather($format = 'json')
+    {
         if ($format == 'json') {
             if (!($this->location instanceof Location)) {
                 $this->location = null;
@@ -108,33 +114,41 @@ class Weatherlib {
             if (empty($this->sun_moon) || !$this->sun_moon) {
                 $this->sun_moon = null;
             }
+
             return json_encode($this);
         } elseif ($format == 'xml') {
             return '{"Only JSON here. If you need xml format, please complete it by yourself."}';
         }
+
         return json_encode($this);
     }
 
-    public function getQueryUrl() {
+    public function getQueryUrl()
+    {
         return $this->provider->getQueryUrl();
     }
 
-    public function getRawData() {
+    public function getRawData()
+    {
         return $this->provider->getRawData();
     }
 
-    public function setRawData($raw) {
+    public function setRawData($raw)
+    {
         $this->provider->setRawData($raw);
     }
 
-    public function getCurrentCondition() {
+    public function getCurrentCondition()
+    {
         if (!($this->currentCondition instanceof Current)) {
             $this->currentCondition = $this->provider->getCurrentCondition();
         }
+
         return $this->currentCondition;
     }
 
-    private function setCurrentCondition(Current $cur=null) {
+    private function setCurrentCondition(Current $cur = null)
+    {
         if (!($cur instanceof Current)) {
             $this->currentCondition = new Current();
         } else {
@@ -142,14 +156,17 @@ class Weatherlib {
         }
     }
 
-    public function getDailyForecast() {
+    public function getDailyForecast()
+    {
         if (!($this->dailyForecast instanceof DailyForecastList)) {
             $this->dailyForecast = $this->provider->getDailyForecast();
         }
+
         return $this->dailyForecast;
     }
 
-    private function setDailyForecast(DailyForecastList $dl=null) {
+    private function setDailyForecast(DailyForecastList $dl = null)
+    {
         if (!($dl instanceof DailyForecastList)) {
             $this->dailyForecast = new DailyForecastList();
         } else {
@@ -157,14 +174,17 @@ class Weatherlib {
         }
     }
 
-    public function getHourlyForecast() {
+    public function getHourlyForecast()
+    {
         if (!($this->hourlyForecast instanceof HourlyForecastList)) {
             $this->hourlyForecast = $this->provider->getHourlyForecast();
         }
+
         return $this->hourlyForecast;
     }
 
-    private function setHourlyForecast(HourlyForecastList $hl=null) {
+    private function setHourlyForecast(HourlyForecastList $hl = null)
+    {
         if (!($hl instanceof HourlyForecastList)) {
             $this->hourlyForecast = new HourlyForecastList();
         } else {
@@ -172,18 +192,21 @@ class Weatherlib {
         }
     }
 
-    private function initData($locationData=[]) {
+    private function initData($locationData = [])
+    {
         $this->setLocation($locationData);
         $this->setCurrentCondition();
         $this->setDailyForecast();
         $this->setHourlyForecast();
     }
 
-    public function error() {
+    public function error()
+    {
         return $this->error;
     }
 
-    public function errno() {
+    public function errno()
+    {
         return $this->errno;
     }
 }

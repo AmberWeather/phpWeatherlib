@@ -1,7 +1,7 @@
 <?php
 /**
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/10
+ * @author: Tiger <DropFan@Gmail.com>
  */
 namespace Weatherlib\Util;
 
@@ -12,12 +12,13 @@ use Weatherlib\Util\Base;
 /**
  *
  */
-class Fetcher extends Base {
+class Fetcher extends Base
+{
 
     /**
      * curl options array.
-     * @see [https://secure.php.net/manual/zh/function.curl-setopt.php]
      * @var array
+     * @see [https://secure.php.net/manual/zh/function.curl-setopt.php]
      */
     private $curlOptions = [];
 
@@ -33,20 +34,21 @@ class Fetcher extends Base {
      */
     private $cookies = Config::CURL_OPT['cookies'];
 
-
-    public function __construct($curlOptions = [], $useragent = '', $cookies = '') {
+    public function __construct($curlOptions = [], $useragent = '', $cookies = '')
+    {
         is_array($curlOptions) && !empty($curlOptions) && $this->curlOptions = $curlOptions;
-        !empty($useragent) && $this->useragent = $useragent;
-        !empty($cookies) && $this->cookies = $cookies;
+        !empty($useragent) && $this->useragent                               = $useragent;
+        !empty($cookies) && $this->cookies                                   = $cookies;
     }
 
     /**
      * Fetch data from url
      * @param  string  $url  target url to fetch
      * @param  integer $mode fetch contents via curl (mode=1) or file_get_contents (other value)
-     * @return string        The content fetched from url
+     * @return string  The content fetched from url
      */
-    public function fetch($url, $mode = 1) {
+    public function fetch($url, $mode = 1)
+    {
         if (1 == $mode) {
             return $this->curlFetch($url);
         } else {
@@ -54,39 +56,47 @@ class Fetcher extends Base {
         }
     }
 
-    public function getCurlOptions() {
+    public function getCurlOptions()
+    {
         return $this->curlOptions;
     }
 
-    public function setCurlOptions($arr = []) {
+    public function setCurlOptions($arr = [])
+    {
         if (is_array($arr) && !empty($arr)) {
             $this->curlOptions = $arr;
         }
     }
 
-    public function setCurlProxy($proxy = '', $auth = '', $type = '') {
-        !empty($proxy) && $this->curlOptions[CURLOPT_PROXY] = $proxy;
+    public function setCurlProxy($proxy = '', $auth = '', $type = '')
+    {
+        !empty($proxy) && $this->curlOptions[CURLOPT_PROXY]       = $proxy;
         !empty($auth) && $this->curlOptions[CURLOPT_PROXYUSERPWD] = $auth;
-        !empty($type) && $this->curlOptions[CURLOPT_PROXYTYPE] = $type == 'socks'? CURLPROXY_SOCKS5:CURLPROXY_HTTP;
+        !empty($type) && $this->curlOptions[CURLOPT_PROXYTYPE]    = $type == 'socks' ? CURLPROXY_SOCKS5 : CURLPROXY_HTTP;
     }
 
-    public function setUseragent($ua = '') {
+    public function setUseragent($ua = '')
+    {
         !empty($ua) && $this->useragent = $ua;
     }
 
-    public function getUseragent() {
+    public function getUseragent()
+    {
         return $this->useragent;
     }
 
-    public function setCookies($cookies = '') {
+    public function setCookies($cookies = '')
+    {
         !empty($cookies) && $this->cookies = $cookies;
     }
 
-    public function getCookies() {
+    public function getCookies()
+    {
         return $this->cookies;
     }
 
-    public function curlFetch($url, $post = false) {
+    public function curlFetch($url, $post = false)
+    {
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -114,13 +124,13 @@ class Fetcher extends Base {
          */
         if (curl_errno($ch) != 0) {
             $result = [
-                        'data' => $content,
-                        'error' => curl_error($ch),
-                        'errno' => curl_errno($ch)
-                        ];
+                'data'  => $content,
+                'error' => curl_error($ch),
+                'errno' => curl_errno($ch),
+            ];
         } else {
             $result = [
-                        'data' => $content
+                'data' => $content,
             ];
         }
 
@@ -129,7 +139,8 @@ class Fetcher extends Base {
         return $result;
     }
 
-    public function fileGetContentsFetch($url) {
+    public function fileGetContentsFetch($url)
+    {
         return file_get_contents($url);
     }
 }

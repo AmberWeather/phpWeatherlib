@@ -1,31 +1,34 @@
 <?php
 /**
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/10
+ * @author: Tiger <DropFan@Gmail.com>
  */
 namespace Weatherlib\Provider;
 
-use Weatherlib\Util\Fetcher as Fetcher;
 use Weatherlib\Model\Location as Location;
+use Weatherlib\Util\Fetcher as Fetcher;
 
 /**
  * This abstract class is the base class of Weather Data Provider.
  * You can extend this class to implement more weather data sources.
- * @author: Tiger <DropFan@Gmail.com>
  * @date: 2015/12/10
+ * @author: Tiger <DropFan@Gmail.com>
  */
-abstract class Provider /*implements IProvider*/ {
+abstract class Provider/*implements IProvider*/
+{
 
     protected $location;
-    protected $apiKey = '';
+    protected $apiKey  = '';
     protected $baseUrl = '';
-    /*protected $params = [
-                         'query' => '',
-                         'format' => 'json'
-                        ];*/
+
+    /*protected $params  = [
+        'query'  => '',
+        'format' => 'json',
+    ];*/
+
     protected $queryUrl = '';
 
-    // protected $query = '40.0494806,116.4073421';
+    // protected $query  = '40.0494806,116.4073421';
     // protected $format = 'json';
     protected $rawData = '';
 
@@ -34,7 +37,8 @@ abstract class Provider /*implements IProvider*/ {
     protected $errno = 0; # 1000+ curl error
     protected $error = '';
 
-    public function __construct(Location $location = null, Fetcher $fetcher = null) {
+    public function __construct(Location $location = null, Fetcher $fetcher = null)
+    {
         if ($location instanceof Location) {
             $this->location = $location;
         } else {
@@ -50,43 +54,52 @@ abstract class Provider /*implements IProvider*/ {
         return false;
     }
 
-    public function getLocation() {
+    public function getLocation()
+    {
         return $this->location;
     }
 
-    public function setLocation(Location $location) {
+    public function setLocation(Location $location)
+    {
         if ($location instanceof Location) {
             $this->location = $location;
+
             return true;
         } else {
             return false;
         }
     }
 
-    public function getFetcher() {
+    public function getFetcher()
+    {
         return $this->fetcher;
     }
 
-    public function setFetcher(Fetcher $fetcher) {
+    public function setFetcher(Fetcher $fetcher)
+    {
         if ($fetcher instanceof Fetcher) {
             $this->fetcher = $fetcher;
+
             return true;
         } else {
             return false;
         }
     }
 
-    public function getQueryUrl() {
+    public function getQueryUrl()
+    {
         $this->buildUrl();
+
         return $this->queryUrl;
     }
 
     abstract public function buildUrl();
 
-    public function fetchRaw($raw = null) {
-        if (!$raw){
+    public function fetchRaw($raw = null)
+    {
+        if (!$raw) {
             $fetcher = $this->fetcher;
-            $res = $fetcher->fetch($this->getQueryUrl());
+            $res     = $fetcher->fetch($this->getQueryUrl());
         } else {
             $res = $raw;
         }
@@ -94,6 +107,7 @@ abstract class Provider /*implements IProvider*/ {
         if (is_array($res)) {
             if (is_string($res['data']) && !empty($res['data'])) {
                 $this->rawData = $res['data'];
+
                 return $this->checkResult();
             } else {
                 $this->error = 'Fetched data is empty.';
@@ -105,20 +119,24 @@ abstract class Provider /*implements IProvider*/ {
             isset($res['errno']) && $this->errno = 1000 + $res['errno']; # 1000 + curl errno
         } elseif (is_string($res)) {
             $this->rawData = $res;
+
             return $this->checkResult();
         } else {
             $this->errno = 1;
             $this->error = 'Fetch raw data failed. (Unknown ERROR.)';
         }
         // var_dump($this->errno, $this->error);
+
         return false;
     }
 
-    public function getRawData() {
+    public function getRawData()
+    {
         return $this->rawData;
     }
 
-    public function setRawData($raw='') {
+    public function setRawData($raw = '')
+    {
         $this->rawData = $raw;
     }
 
@@ -136,13 +154,15 @@ abstract class Provider /*implements IProvider*/ {
 
     abstract public function getHourlyForecast();
 
-    abstract public function getWeatherCode($weather='');
+    abstract public function getWeatherCode($weather = '');
 
-    public function errno() {
+    public function errno()
+    {
         return $this->errno;
     }
 
-    public function error() {
+    public function error()
+    {
         return $this->error;
     }
 }
