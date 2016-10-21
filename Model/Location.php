@@ -20,6 +20,8 @@ class Location extends Base {
     private $owmid;
     private $accuid;
     private $yhcode;
+    private $amberid;
+    private $fcaid;
     public $state;
     public $country;
     public $countryCode;
@@ -118,6 +120,22 @@ class Location extends Base {
 
     public function setYhcode($value) {
         $this->yhcode = $value;
+    }
+
+    public function getAmberid() {
+        return $this->amberid;
+    }
+
+    public function setAmberid($value) {
+        $this->amberid = $value;
+    }
+
+    public function getFcaid() {
+        return $this->fcaid;
+    }
+
+    public function setFcaid($value) {
+        $this->fcaid = $value;
     }
 
     public function getCity() {
