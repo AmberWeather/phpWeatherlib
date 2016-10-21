@@ -25,7 +25,7 @@ class Weatherlib
     private $errno = 0;
     private $error = '';
 
-    public function __construct($locationData = [], $datasource = 'wunderground')
+    public function __construct($locationData = [], $datasource = '')
     {
         $this->initData($locationData);
         $this->setLocation($locationData);
