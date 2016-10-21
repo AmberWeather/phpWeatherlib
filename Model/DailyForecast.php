@@ -59,8 +59,8 @@ class DailyForecast extends Forecast
     public function setTemperature($v)
     {
         $this->temperature = [
-            'high'       => $v['high'],
-            'low'        => $v['low'],
+            'high'       => isset($v['high']) ? $v['high']: null,
+            'low'        => isset($v['low']) ? $v['low'] : null,
             'high_night' => isset($v['high_night']) ? $v['high_night'] : null,
             'low_night'  => isset($v['low_night']) ? $v['low_night'] : null,
             'ave'        => isset($v['ave']) ? $v['ave'] : null,
