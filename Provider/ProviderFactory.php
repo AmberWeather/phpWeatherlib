@@ -7,6 +7,7 @@ namespace Weatherlib\Provider;
 
 use Weatherlib\Model\Location;
 use Weatherlib\Provider\WundergroundProvider;
+use Weatherlib\Provider\AmberweatherProvider;
 
 /**
  * This class is a creater of provider.
@@ -28,15 +29,26 @@ class ProviderFactory
      * @param  Location|null  $location object of Location
      * @return Provider|false object of Provier
      */
-    public static function getProvider($provider = 'wunderground', Location $location = null)
+    public static function getProvider($provider = '', Location $location = null)
     {
         if (!($location instanceof Location)) {
             return false;
         }
-        if ($provider === 'wunderground') {
-            return new WundergroundProvider($location);
+
+        $wprovider = null;
+
+        switch ($provider) {
+            case 'wunderground':
+                $wprovider = new WundergroundProvider($location);
+                break;
+            case 'amberweather':
+                $wprovider = new AmberweatherProvider($location);
+                break;
+            default:
+                throw new \Exception('Invalid weather data provider!');
+                break;
         }
 
-        return false;
+        return $wprovider;
     }
 }
