@@ -49,6 +49,8 @@ class Location extends Base {
                                 'accuid' => '',
                                 'owmid' => '',
                                 'yhcode' => '',
+                                'amberid' => '',
+                                'fcaid' => '',
                                 'wmo' => '',
                                 'zipcode' => ''
                                 ]) {
@@ -74,6 +76,8 @@ class Location extends Base {
                                 'accuid' => '',
                                 'owmid' => '',
                                 'yhcode' => '',
+                                'amberid' => '',
+                                'fcaid' => '',
                                 'wmo' => '',
                                 'zipcode' => ''
                                 ]) {
