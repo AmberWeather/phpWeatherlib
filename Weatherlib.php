@@ -11,7 +11,6 @@ use Weatherlib\Model\HourlyForecastList;
 use Weatherlib\Model\Location;
 use Weatherlib\Provider\ProviderFactory;
 
-
 class Weatherlib
 {
 
@@ -29,7 +28,10 @@ class Weatherlib
     {
         $this->initData($locationData);
         $this->setLocation($locationData);
-        $this->provider = ProviderFactory::getProvider($datasource, $this->location);
+
+        if (!empty($datasource)) {
+            $this->setProvider($datasource);
+        }
     }
 
     public function getProvider()
@@ -37,10 +39,13 @@ class Weatherlib
         return $this->provider;
     }
 
-    public function setProvider(Provider $provider)
+    public function setProvider($provider)
     {
         if ($provider instanceof Provider) {
             $this->provider = $provider;
+        } elseif (is_string($provider)
+                  && in_array($provider, ['amberweather', 'wunderground'])) {
+            $this->provider = ProviderFactory::getProvider($provider, $this->location);
         } else {
             return false;
         }
@@ -64,6 +69,8 @@ class Weatherlib
         //         'accuid' => '',
         //         'owmid' => '',
         //         'yhcode' => '',
+        //         'amberid' => '',
+        //         'fcaid' => '',
         //         'wmo' => '',
         //         'zipcode' => '100000'
         //         ];
