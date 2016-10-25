@@ -61,9 +61,12 @@ class WundergroundProvider extends Provider
 
     public function buildParams()
     {
-        $p              = '';
+        $p = '';
+
         $this->features = implode('/', $this->params['features']);
-        $s              = [];
+
+        $s = [];
+
         foreach ($this->params['settings'] as $k => $v) {
             $s[] = $k . ':' . $v;
         }
@@ -80,7 +83,7 @@ class WundergroundProvider extends Provider
 
         if (!$j) {
             $this->errno = 2001;
-            $this->error = 'Fetched data decode failed, maybe it is not json format.';
+            $this->error = 'Fetched data decode failed, maybe it is not a json.';
 
             return false;
         }
@@ -163,7 +166,8 @@ class WundergroundProvider extends Provider
         isset($c['temp_c']) && $ret->setTemperature($c['temp_c']);
         isset($c['relative_humidity']) && $ret->setHumidity($c['relative_humidity']);
 
-        $w                                            = [];
+        $w = [];
+
         isset($c['wind_kph']) && $w['speed']          = $c['wind_kph'];
         isset($c['wind_dir']) && $w['direction']      = $c['wind_dir'];
         isset($c['wind_degrees']) && $w['degrees']    = $c['wind_degrees'];
