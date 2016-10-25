@@ -22,7 +22,7 @@ class AmberweatherProvider extends Provider
     private $token = 'just4test';
 
     private $params = [
-        'lid'  => '',
+        'lid'  => '20101816670',
         'lat'  => '39.558157',
         'lon'  => '116.529225',
         'lang' => 'en',
@@ -35,7 +35,7 @@ class AmberweatherProvider extends Provider
     {
         parent::__construct($location);
 
-        $this->baseUrl  = (Config::AmberWS['baseurl']) ? Config::AmberWS['baseurl'] : 'http://ws.amberweather.com/api/v1/weather';
+        $this->baseUrl  = Config::AmberWS['baseurl'];
         $this->appid    = (string) $apiKey ?: Config::AmberWS['appid'];
         $this->apptoken = (string) $apptoken ?: Config::AmberWS['token'];
 
