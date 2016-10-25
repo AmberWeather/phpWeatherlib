@@ -35,7 +35,7 @@ class AmberweatherProvider extends Provider
     {
         parent::__construct($location);
 
-        $this->baseUrl  = isset(Config::AmberWS['baseurl']) ? Config::AmberWS['baseurl'] : 'http://ws.amberweather.com/api/v1/weather';
+        $this->baseUrl  = (Config::AmberWS['baseurl']) ? Config::AmberWS['baseurl'] : 'http://ws.amberweather.com/api/v1/weather';
         $this->appid    = (string) $apiKey ?: Config::AmberWS['appid'];
         $this->apptoken = (string) $apptoken ?: Config::AmberWS['token'];
 
